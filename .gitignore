@@ -1,0 +1,27 @@
+package main
+import (
+	"fmt"
+	"strconv"
+)
+
+type Token struct {
+	recipient int
+	data string
+}
+
+
+func main() {
+	c := make(chan string);
+	token := Token{recipient: 39, data: "token"}
+ 	go thread(1, token, c)	
+	fmt.Println(<-c)
+}
+
+func thread(i int, t Token, c chan string) {
+	if (t.recipient == i) {
+		r := "It's token № " + strconv.FormatInt(int64(i), 10) + ": " + t.data
+		c <- r
+	} else {
+		go thread(i+1, t, c)
+	}
+}
